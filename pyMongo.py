@@ -1,80 +1,70 @@
 import pymongo
 import pprint
 
-print("Iniciando a conexão com o MongoDB")
-
 # Cria a conexão com o MongoDB
-connection = pymongo.MongoClient("link-para-o-mongo-db")
+connection = pymongo.MongoClient("Connection String")
 
-# Cria o banco de dados e a collection
 db = connection.bank
 collection = db.clients
 
-# Define as informações que irão compor o documento
+# Lista de Documentos
 new_clients = [{
             "agency": 1050,
             "name": "Joaquim Jose",
-            "cpf": "123.456.789.11",
-            "address": "Rua 2, número 1000",
-            "account": ["cc", "110501"],
-            "balance": 5000
+            "cpf": "999.999.999-99",
+            "address": "Av Mal Tito, 7014",
+            "account": ["cc", "115641"],
+            "balance": 56755
             },
             {
             "agency": 1050,
             "name": "Roque Júnior",
-            "cpf": "123.456.789.22",
-            "address": "Rua 3, número 800",
-            "account": ["cp", "210501"],
-            "balance": 15000
+            "cpf": "888.888.888-88",
+            "address": "Rua Dunas de Miragaia, 512",
+            "account": ["cp", "654651"],
+            "balance": 984561
             },
             {
             "agency": 2000,
             "name": "Maria Lima",
-            "cpf": "123.456.789.78",
-            "address": "Rua 4, número 500",
-            "account": ["cp", "220001"],
-            "balance": 17000
+            "cpf": "777.777.777-77",
+            "address": "Rua Joaquim Jose, 1",
+            "account": ["cp", "65465"],
+            "balance": 654654
             },
             {
             "agency": 2000,
             "name": "Mathew Silva",
-            "cpf": "123.456.789.44",
-            "address": "Rua 4, número 700",
-            "account": ["cc", "120001"],
+            "cpf": "666.666.666-66",
+            "address": "Rua Maria de Lourdes, 17",
+            "account": ["cc", "98451"],
             "balance": 1500
             }]
 
 
-print("Salvando as informações no MongoDB")
 clients = db.clients
 result = clients.insert_many(new_clients)
 print(result.inserted_ids)
 
 
-print("\n Recuperando as informações da cliente Sandy:")
 pprint.pprint(db.clients.find_one({"name": "Joaquim Jose"}))
 
 
-print("\n Listagem dos clientes presentes na coleção clients:")
 for client in clients.find():
     pprint.pprint(client)
 
 
-print("\n Recuperando informação dos clientes de maneira ordenada pelo nome:")
 for client in clients.find({}).sort("name"):
     pprint.pprint(client)
 
 
-print("\n Clientes da agência 2000:")
 for client in clients.find({"agency": 2000}):
     pprint.pprint(client)
 
 
-print("\n Clientes com conta poupança:")
 for client in clients.find({"account": "cp"}):
     pprint.pprint(client)
 
 
-print("\n Clientes com conta corrente:")
 for client in clients.find({"account": "cc"}):
     pprint.pprint(client)

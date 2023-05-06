@@ -1,8 +1,3 @@
-"""
-    Primeiro programa de integração com banco de dados
-    utilizando SQLAlchemy e modelo ORM
-
-"""
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import relationship
@@ -30,9 +25,6 @@ Base = declarative_base()
 
 
 class Client(Base):
-    """
-        Esta classe representa a tabela cliente dentro do SQlite.
-    """
     __tablename__ = "client"
     # atributos
     id = Column(Integer, primary_key=True)
@@ -45,9 +37,6 @@ class Client(Base):
 
 
 class Account(Base):
-    """
-            Esta classe representa a tabela account dentro do SQlite.
-        """
     __tablename__ = "account"
     # atributos
     id = Column(Integer, primary_key=True)
@@ -112,26 +101,21 @@ with Session(engine) as session:
 
 
 # Consulta as Informações Salvas no Banco de Dados SQLite
-
-print('Recuperando clientes a partir de uma condição de filtragem:')
 stmt_clients = select(Client).where(Client.name.in_(['Joao da Silva', 'Mathew Cruz']))
 for result in session.scalars(stmt_clients):
     print(result)
 
 
-print("\nRecuperando clientes de maneira ordenada:")
 stmt_order = select(Client).order_by(Client.name.desc())
 for result in session.scalars(stmt_order):
     print(result)
 
 
-print("\nRecuperando contas de maneira ordenada:")
 stmt_accounts = select(Account).order_by(Account.type.desc())
 for result in session.scalars(stmt_accounts):
     print(result)
 
 
-print("\nRecuperando contas e clientes:")
 stmt_join = select(Client.name, Account.type, Account.balance).join_from(Client, Account)
 connection = engine.connect()
 results = connection.execute(stmt_join).fetchall()
